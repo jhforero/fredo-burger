@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import MenuGrid from "./MenuGrid";
 
 export default async function Menu() {
   let categories: { name: string; items: { id: string; name: string; description: string | null; price: number; image: string | null; available: boolean }[] }[] = [];
@@ -43,51 +44,7 @@ export default async function Menu() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-10">
-            {categories.map((cat) => (
-              <div key={cat.name}>
-                <h3 className="mb-4 text-xl font-semibold text-orange-400">
-                  {cat.name}
-                </h3>
-                {cat.items.length === 0 ? (
-                  <p className="text-sm text-zinc-500">Próximamente</p>
-                ) : (
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    {cat.items.map((item) => (
-                      <div
-                        key={item.id}
-                        className="overflow-hidden rounded-xl bg-zinc-800 transition hover:bg-zinc-700"
-                      >
-                        {item.image ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="h-40 w-full object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-40 items-center justify-center bg-zinc-700/50 text-3xl">
-                            🥩
-                          </div>
-                        )}
-                        <div className="p-4">
-                          <h4 className="font-semibold text-white">{item.name}</h4>
-                          {item.description && (
-                            <p className="mt-1 text-sm text-zinc-400 line-clamp-2">
-                              {item.description}
-                            </p>
-                          )}
-                          <p className="mt-2 text-lg font-bold text-orange-500">
-                            ${item.price.toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          <MenuGrid categories={categories} />
         )}
       </div>
     </section>
