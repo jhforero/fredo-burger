@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 type EventType = { id: string; name: string };
 type MenuItemType = { id: string; name: string; price: number; category: { name: string } };
 
-export default function CotizarPage() {
+function CotizarForm() {
+  const searchParams = useSearchParams();
   const [events, setEvents] = useState<EventType[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItemType[]>([]);
   const [selectedItems, setSelectedItems] = useState<Record<string, number>>({});
@@ -26,11 +28,19 @@ export default function CotizarPage() {
       })
       .catch(() => {});
 
-    fetch("/api/quotes")
-      .catch(() => {});
+    // Pre-load refrigerios from URL params
+    const refrigeriosParam = searchParams.get("refrigerios");
+    if (refrigeriosParam) {
+      try {
+        const preselected = JSON.parse(refrigeriosParam) as { menuItemId: string; quantity: number }[];
+        const map: Record<string, number> = {};
+        for (const item of preselected) {
+          map[item.menuItemId] = item.quantity;
+        }
+        setSelectedItems(map);
+      } catch { /* ignore */ }
+    }
 
-    // Fetch events from a simple inline approach
-    // Events are seeded, so we hardcode the list for client usage
     setEvents([
       { id: "corporativo", name: "Corporativo" },
       { id: "cumpleanos", name: "Cumpleaños" },
@@ -38,7 +48,7 @@ export default function CotizarPage() {
       { id: "reunion", name: "Reunión familiar" },
       { id: "otro", name: "Otro" },
     ]);
-  }, []);
+  }, [searchParams]);
 
   function toggleItem(id: string) {
     setSelectedItems((prev) => {
@@ -226,5 +236,13 @@ export default function CotizarPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function CotizarPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-zinc-900"><p className="text-zinc-400">Cargando...</p></div>}>
+      <CotizarForm />
+    </Suspense>
   );
 }

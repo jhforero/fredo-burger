@@ -8,6 +8,7 @@ const links = [
   { href: "#nosotros", label: "Nosotros" },
   { href: "#servicios", label: "Servicios" },
   { href: "#menu", label: "Menú" },
+  { href: "#refrigerios", label: "Refrigerios" },
   { href: "#galeria", label: "Galería" },
   { href: "#contacto", label: "Contacto" },
 ];

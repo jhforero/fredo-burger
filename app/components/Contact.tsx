@@ -96,7 +96,7 @@ export default function Contact() {
                   name="phone"
                   required
                   className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 text-white placeholder-zinc-500 focus:border-orange-500 focus:outline-none"
-                  placeholder="+1 234 567 890"
+                  placeholder="+57 000 000 000"
                 />
               </div>
               <div>
